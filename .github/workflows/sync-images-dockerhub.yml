@@ -15,8 +15,6 @@ env:
 
   # registry.cn-shanghai.aliyuncs.com/aceslup/slim:latest
   ACR_REGISTRY: "registry.cn-shanghai.aliyuncs.com"
-  ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
-  ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
 
 jobs:
   build:
@@ -33,8 +31,8 @@ jobs:
       uses: docker/login-action@v2.2.0
       with:
         registry: "registry.cn-shanghai.aliyuncs.com"
-        username: ${ACR_USERNAME}
-        password: ${ACR_PASSWORD}
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
         logout: false
 
     # 使用 skopeo 工具将镜像同步到阿里云个人仓库中
