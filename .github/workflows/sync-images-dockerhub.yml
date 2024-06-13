@@ -5,15 +5,20 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      HUB_IMAGE:
+        required: true
+        default: ""
+        description: "DockerHub 中的 镜像名:标签"
+      ACR_IMAGE:
+        required: true
+        default: "aceslup/"
+        description: "ACR 中的 镜像名:标签"       
 
 env:
-  # 使用时, 确认镜像名字和标签
   HUB_SRC: "docker.io"
-  HUB_IMAGE: "dslim/slim"
-  IMAGE_TAG: "latest"
-  ACR_IMAGE: "aceslup/slim"
-
-  # registry.cn-shanghai.aliyuncs.com/aceslup/slim:latest
+  # https://registry.cn-shanghai.aliyuncs.com/aceslup/slim:1.40.11
   ACR_REGISTRY: "registry.cn-shanghai.aliyuncs.com"
 
 jobs:
@@ -25,10 +30,10 @@ jobs:
       uses: actions/checkout@v3
       
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2.9.1
+      uses: docker/setup-buildx-action@v3
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v2.2.0
+    - name: Login to ACR
+      uses: docker/login-action@v3
       with:
         registry: "registry.cn-shanghai.aliyuncs.com"
         username: ${{ secrets.ACR_USERNAME }}
@@ -36,8 +41,8 @@ jobs:
         logout: false
 
     # 使用 skopeo 工具将镜像同步到阿里云个人仓库中
-    - name: Use Skopeo Tools Sync Image to Docker Hub
+    - name: Use Skopeo Tools Sync DockerHub Image to ACR
       run: |
         skopeo copy \
-          docker://${HUB_SRC}/${HUB_IMAGE}:${IMAGE_TAG} \
-          docker://${ACR_REGISTRY}/${ACR_IMAGE}:${IMAGE_TAG}
+          docker://${HUB_SRC}/${{ github.event.inputs.HUB_IMAGE }} \
+          docker://${ACR_REGISTRY}/${{ github.event.inputs.ACR_IMAGE }}
