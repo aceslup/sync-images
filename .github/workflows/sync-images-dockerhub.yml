@@ -1,10 +1,6 @@
 name: Sync DockerHub images to ACR
 
 on:
-#  push:
-#    branches: [ "main" ]
-#  pull_request:
-#    branches: [ "main" ]
   workflow_dispatch:
     inputs:
       HUB_IMAGE:
@@ -14,11 +10,14 @@ on:
       ACR_IMAGE:
         required: true
         default: "aceslup/"
-        description: "ACR 中的 镜像名:标签"       
+        description: "ACR 中的 镜像名:标签"
+  #push:
+  #  branches: [ "main" ]
+  #pull_request:
+  #  branches: [ "main" ]
 
 env:
   HUB_SRC: "docker.io"
-  # https://registry.cn-shanghai.aliyuncs.com/aceslup/slim:1.40.11
   ACR_REGISTRY: "registry.cn-shanghai.aliyuncs.com"
 
 jobs:
@@ -46,3 +45,8 @@ jobs:
         skopeo copy \
           docker://${HUB_SRC}/${{ github.event.inputs.HUB_IMAGE }} \
           docker://${ACR_REGISTRY}/${{ github.event.inputs.ACR_IMAGE }}
+
+    - name: How to pull image
+      run: |
+        echo "docker pull ${ACR_REGISTRY}/${{ github.event.inputs.ACR_IMAGE }}"
+  
