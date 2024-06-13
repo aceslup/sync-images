@@ -1,10 +1,10 @@
-name: Sync dockerhub images to ACR
+name: Sync DockerHub images to ACR
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+#  push:
+#    branches: [ "main" ]
+#  pull_request:
+#    branches: [ "main" ]
   workflow_dispatch:
     inputs:
       HUB_IMAGE:
@@ -41,7 +41,7 @@ jobs:
         logout: false
 
     # 使用 skopeo 工具将镜像同步到阿里云个人仓库中
-    - name: Use Skopeo Tools Sync DockerHub Image to ACR
+    - name: Use Skopeo Tools Sync DockerHub images to ACR
       run: |
         skopeo copy \
           docker://${HUB_SRC}/${{ github.event.inputs.HUB_IMAGE }} \
