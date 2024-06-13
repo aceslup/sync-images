@@ -1,0 +1,45 @@
+name: Sync dockerhub images to ACR
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  # 使用时, 确认镜像名字和标签
+  HUB_SRC: "docker.io"
+  HUB_IMAGE: "dslim/slim"
+  IMAGE_TAG: "latest"
+  ACR_IMAGE: "aceslup/slim"
+
+  # registry.cn-shanghai.aliyuncs.com/aceslup/slim:latest
+  ACR_REGISTRY: "registry.cn-shanghai.aliyuncs.com"
+  ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+  ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Git pull
+      uses: actions/checkout@v3
+      
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2.9.1
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2.2.0
+      with:
+        registry: ${ACR_REGISTRY}
+        username: ${ACR_USERNAME}
+        password: ${ACR_PASSWORD}
+        logout: false
+
+    # 使用 skopeo 工具将镜像同步到阿里云个人仓库中
+    - name: Use Skopeo Tools Sync Image to Docker Hub
+      run: |
+        skopeo copy \
+          docker://${HUB_SRC}/${HUB_IMAGE}:${IMAGE_TAG} \
+          docker://${ACR_REGISTRY}/${ACR_IMAGE}:${IMAGE_TAG}
