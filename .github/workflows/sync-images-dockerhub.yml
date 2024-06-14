@@ -6,11 +6,11 @@ on:
       HUB_IMAGE:
         required: true
         default: ""
-        description: "DockerHub 中的 镜像名:标签"
+        description: "DockerHub 中的 仓库/镜像名:标签"
       ACR_IMAGE:
         required: true
-        default: "aceslup/"
-        description: "ACR 中的 镜像名:标签"
+        default: "aceslup/docker.io_"
+        description: "ACR 中的 docker.io_仓库_镜像名:标签"
   #push:
   #  branches: [ "main" ]
   #pull_request:
