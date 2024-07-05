@@ -6,7 +6,7 @@ on:
       HUB_IMAGE:
         required: true
         default: ""
-        description: "K8S 中的 仓库/镜像名:标签"
+        description: "registry.k8s.io 中的 仓库/镜像名:标签"
       ACR_IMAGE:
         required: true
         default: "aceslup/registry.k8s.io_"
