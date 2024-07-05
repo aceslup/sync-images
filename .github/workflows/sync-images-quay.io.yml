@@ -1,4 +1,4 @@
-name: Sync Quay images to ACR
+name: Sync quay.io images to ACR
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
       HUB_IMAGE:
         required: true
         default: ""
-        description: "Quay 中的 仓库/镜像名:标签"
+        description: "quay.io 中的 仓库/镜像名:标签"
       ACR_IMAGE:
         required: true
         default: "aceslup/quay.io_"
@@ -40,7 +40,7 @@ jobs:
         logout: false
 
     # 使用 skopeo 工具将镜像同步到阿里云个人仓库中
-    - name: Use Skopeo Tools Sync Quay images to ACR
+    - name: Use Skopeo Tools Sync images to ACR
       run: |
         skopeo copy \
           docker://${HUB_SRC}/${{ github.event.inputs.HUB_IMAGE }} \
