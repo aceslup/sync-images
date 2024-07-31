@@ -23,7 +23,6 @@ on:
 env:
   ACR_REGISTRY: "registry.cn-shanghai.aliyuncs.com"
   ACR_NAMESPACE: "aceslup"
-  ACR_IMAGE_FULLNAME: "${ACR_REGISTRY}/${ACR_NAMESPACE}/${{ github.event.inputs.HUB_SRC }}_${{ github.event.inputs.ACR_IMAGE }}"
 
 jobs:
   build:
@@ -49,7 +48,7 @@ jobs:
       run: |
         skopeo copy \
           docker://${{ github.event.inputs.HUB_SRC }}/${{ github.event.inputs.HUB_IMAGE }} \
-          docker://${ACR_IMAGE_FULLNAME}
+          docker://${ACR_REGISTRY}/${ACR_NAMESPACE}/${{ github.event.inputs.HUB_SRC }}_${{ github.event.inputs.ACR_IMAGE }}
 
     - name: How to pull image
       run: |
