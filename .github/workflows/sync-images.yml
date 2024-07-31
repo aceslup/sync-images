@@ -38,7 +38,7 @@ jobs:
     - name: Login to ACR
       uses: docker/login-action@v3
       with:
-        registry: "registry.cn-shanghai.aliyuncs.com"
+        registry: "${ACR_REGISTRY}"
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
         logout: false
@@ -52,4 +52,4 @@ jobs:
 
     - name: How to pull image
       run: |
-        echo "docker pull ${ACR_REGISTRY}/${{ github.event.inputs.ACR_IMAGE }}"
+        echo "docker pull ${ACR_REGISTRY}/${ACR_NAMESPACE}/${{ github.event.inputs.HUB_SRC }}_${{ github.event.inputs.ACR_IMAGE }}"
